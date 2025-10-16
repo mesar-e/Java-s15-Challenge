@@ -17,6 +17,7 @@ public class Book {
     public Book (String title, String author, String publisher, double price) {
         this.id = UUID.randomUUID().toString();
         this.title = title;
+        this.author = author;
         this.publisher = publisher;
         this.price = price;
         this.isAvailable = true;
