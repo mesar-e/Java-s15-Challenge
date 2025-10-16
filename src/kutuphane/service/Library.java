@@ -15,10 +15,13 @@ public class Library {
 
     private final Map<String, Member> members;
 
+    private final Map<String, String> borrowedBookRecords;
+
     //constructor
     public Library() {
         this.books = new HashMap<>();
         this.members = new HashMap<>();
+        this.borrowedBookRecords = new HashMap<>();
     }
 
     //kütühaneye kitap ekler
@@ -100,5 +103,80 @@ public class Library {
             System.out.println("HATA: kitap bulunamadı");
             return false;
         }
+    }
+
+    //tüm üyeleri listeler
+    public void displayAllMembers() {
+        System.out.println("---kütüphanedeki üyelerin listesi---");
+        if (members.isEmpty()) {
+            System.out.println("kütüphanede üye yok");
+        } else {
+            for (Member member : members.values()) {
+                System.out.println(member);
+            }
+        }
+    }
+
+    // bir üyeye kitabı ödünç verir
+    public void lendBook(String memberId, String bookId) {
+        Member member = members.get(memberId);
+        Book book = books.get(bookId);
+
+        if (member == null) {
+            System.out.println("HATA: ID ile eşleşen üye yok");
+            return;
+        }
+        if (book == null) {
+            System.out.println("HATA: ID ile eşleşen kitap yok");
+            return;
+        }
+        if (!book.isAvailable()) {
+            String borrowerMemberId = borrowedBookRecords.get(bookId);
+            Member borrower = members.get(borrowerMemberId);
+
+            if (borrower != null) {
+                System.out.println("Hata: Bu kitap şu anda " + borrower.getName() + " isimli üyede olduğu için ödünç alınamaz.");
+            }
+            return;
+        }
+        if (member.getBorrowedBooks().size() >= Member.max_allowed_books) {
+            System.out.println("HATA: üye maksimum kitap saıyısna ulaştı");
+            return;
+        }
+
+        book.setAvailable(false);
+        member.borrowBook(book);
+        borrowedBookRecords.put(bookId, memberId);
+        System.out.println(book.getTitle() + " kitabı " + member.getName() + " isimli üyeye ödünç verildi");
+        System.out.println("Tutar: " + book.getPrice());
+
+    }
+
+    // ödünç alınan kitabı iade eder
+    public void takeBackBook (String bookID) {
+
+        String memberId = borrowedBookRecords.get(bookID);
+        Book book = books.get(bookID);
+
+        if (book == null) {
+            System.out.println("HATA: sistemde bu ID ile kitap yok");
+            return;
+        }
+        if (memberId == null) {
+            System.out.println("HATA: bu kitap kimseye ödünç verilmemiş");
+            return;
+        }
+        Member member = members.get(memberId);
+        if (member == null) {
+            System.out.println("HATA: kitabı alan üye sistemde yok");
+            return;
+        }
+
+        book.setAvailable(true);
+        member.returnBook(book);
+        borrowedBookRecords.remove(bookID);
+        System.out.println(book.getTitle() + " kitabı " + member.getName() + " isimli üyeden geri alındı");
+        System.out.println("Ücret İadesi Yapıldı: Tutar = " + book.getPrice() + " TL");
+
     }
 }
