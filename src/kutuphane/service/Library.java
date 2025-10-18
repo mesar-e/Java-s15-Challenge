@@ -90,12 +90,13 @@ public class Library {
     }
 
     //var olan bir kitabın bilgilerini günceller
-    public boolean updateBook (String bookId, String newTitle, String newAuthor, double newPrice) {
+    public boolean updateBook (String bookId, String newTitle, String newAuthor,String newPublisher, double newPrice) {
         Book bookToUpdate = findBookById(bookId);
 
         if (bookToUpdate != null) {
             bookToUpdate.setTitle(newTitle);
             bookToUpdate.setAuthor(newAuthor);
+            bookToUpdate.setPublisher(newPublisher);
             bookToUpdate.setPrice(newPrice);
             System.out.println(bookToUpdate.getTitle() + " başlıklı kitap güncellendi");
             return true;

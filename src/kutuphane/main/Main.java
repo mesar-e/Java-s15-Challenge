@@ -15,6 +15,7 @@ public class Main {
 
         Library library = new Library();
 
+
         library.addBook(new Book("Yüzklerin Efendisi","Tolkien","A yayını",150.0));
         library.addBook(new Book("Kırık Hançer","Ahmet Yılmaz Boyunağa","Timaş",100.0));
         library.addBook(new Book("Sefiller","Victor Hugo","B yayını",75.0));
@@ -114,11 +115,14 @@ public class Main {
         System.out.print("Yeni Yazar: ");
         String newAuthor = scanner.nextLine();
 
+        System.out.print("Yeni Yayınevi: ");
+        String newPublisher = scanner.nextLine();
+
         System.out.print("Yeni Fiyat: ");
         double newPrice = scanner.nextDouble();
         scanner.nextLine();
 
-        library.updateBook(bookId, newTitle, newAuthor, newPrice);
+        library.updateBook(bookId, newTitle, newAuthor, newPublisher, newPrice);
     }
 
     private static void handleSearchByTitle (Scanner scanner, Library library) {
